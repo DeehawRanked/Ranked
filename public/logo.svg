@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 260" fill="none">
+  <defs>
+    <linearGradient id="rg" x1="10%" y1="5%" x2="90%" y2="95%">
+      <stop offset="0%" stop-color="#FF2020"/>
+      <stop offset="100%" stop-color="#880000"/>
+    </linearGradient>
+  </defs>
+
+  <!-- R body with counter cutout (even-odd) -->
+  <path
+    fill="url(#rg)"
+    fill-rule="evenodd"
+    d="
+      M 38 28
+      L 138 28
+      Q 202 28 202 78
+      Q 202 118 165 130
+      L 210 240
+      L 178 240
+      L 136 132
+      L 65 132
+      L 65 240
+      L 38 240
+      Z
+
+      M 65 56
+      L 128 56
+      Q 162 56 162 78
+      Q 162 100 128 100
+      L 65 100
+      Z
+    "
+  />
+
+  <!-- Angled top-left tab (italic serif arrow going upper-left) -->
+  <polygon points="8,28 52,14 52,28" fill="url(#rg)"/>
+
+  <!-- Camera aperture at bowl-leg junction -->
+  <circle cx="165" cy="130" r="32" fill="#080808"/>
+  <circle cx="165" cy="130" r="32" fill="none" stroke="url(#rg)" stroke-width="2.5"/>
+
+  <!-- 6-blade aperture (3 ellipses × 60°) -->
+  <g transform="translate(165,130)">
+    <ellipse rx="8.5" ry="20" fill="#CC0000" opacity="0.85" transform="rotate(0)"/>
+    <ellipse rx="8.5" ry="20" fill="#CC0000" opacity="0.85" transform="rotate(60)"/>
+    <ellipse rx="8.5" ry="20" fill="#CC0000" opacity="0.85" transform="rotate(120)"/>
+    <!-- Center lens -->
+    <circle r="9" fill="#080808"/>
+    <circle r="3.5" fill="#1a0000"/>
+  </g>
+</svg>
