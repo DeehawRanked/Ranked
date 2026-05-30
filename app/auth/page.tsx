@@ -58,29 +58,34 @@ export default function AuthPage() {
 
     setLoading(true);
 
-    const result = await (
-      mode === 'signup'
-        ? register(email.trim(), password, username.trim())
-        : signIn(email.trim(), password)
-    );
+    try {
+      const result = await (
+        mode === 'signup'
+          ? register(email.trim(), password, username.trim())
+          : signIn(email.trim(), password)
+      );
 
-    if (!result.success) {
-      setError(result.error ?? 'Something went wrong.');
+      if (!result.success) {
+        setError(result.error ?? 'Something went wrong.');
+        setLoading(false);
+        return;
+      }
+
+      if (result.needsVerification) {
+        setSuccess('Check your email and click the verification link before signing in.');
+        setLoading(false);
+        return;
+      }
+
+      if (result.session) {
+        setUsername(result.session.username, result.session.id);
+      }
+
+      router.replace('/');
+    } catch {
+      setError('Something went wrong. Please try again.');
       setLoading(false);
-      return;
     }
-
-    if (result.needsVerification) {
-      setSuccess('Check your email and click the verification link before signing in.');
-      setLoading(false);
-      return;
-    }
-
-    if (result.session) {
-      setUsername(result.session.username, result.session.id);
-    }
-
-    router.replace('/');
   }
 
   return (
@@ -199,25 +204,6 @@ export default function AuthPage() {
           {loading ? '…' : mode === 'signup' ? 'Create Account →' : 'Sign In →'}
         </button>
       </form>
-
-      {/* Divider */}
-      <div className="flex items-center gap-3 my-5 w-full max-w-sm">
-        <div className="h-px flex-1 bg-zinc-800" />
-        <span className="text-zinc-600 text-xs font-medium">or</span>
-        <div className="h-px flex-1 bg-zinc-800" />
-      </div>
-
-      {/* Sign in with Apple */}
-      <button
-        type="button"
-        onClick={() => setError('Apple Sign In requires an Apple Developer account and HTTPS. Coming soon!')}
-        className="w-full max-w-sm flex items-center justify-center gap-3 bg-white hover:bg-zinc-100 text-black font-bold text-sm py-4 rounded-2xl transition-colors"
-      >
-        <svg width="17" height="17" viewBox="0 0 814 1000" fill="currentColor">
-          <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76.5 0-103.7 40.8-165.9 40.8s-105-42.4-150.3-109.9c-51.8-75.5-83.4-190.8-83.4-300.3 0-180.5 117.6-275.8 233.5-275.8 63.4 0 116.2 41.8 155.8 41.8 37.5 0 98.7-44.2 168.1-44.2zm-73.9-294.8c31.5-37.5 54.2-89.7 54.2-141.9 0-7.7-.7-15.4-1.9-22.5-51.2 2-112.1 34.2-148.8 71.9-28.9 30.9-56.5 82.5-56.5 135.4 0 8.4 1.3 16.7 1.9 19.2 3.2.6 8.4 1.3 13.6 1.3 46.2 0 103.1-30.8 137.5-63.4z" />
-        </svg>
-        Sign in with Apple
-      </button>
 
       <p className="text-zinc-700 text-xs mt-6 text-center max-w-xs">
         By continuing you agree to the{' '}
