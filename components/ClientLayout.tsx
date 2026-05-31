@@ -30,13 +30,14 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session) {
         setHasSession(true);
-        const profile = await fetchProfile(session.user.id);
-        if (profile) {
-          setProfile(profile);
-        } else {
-          // Profile not yet created (trigger may be delayed) — fall back to username only
-          setUsername(session.user.user_metadata?.username ?? '', session.user.id);
-        }
+        // Fetch profile in background — don't block ready on it
+        fetchProfile(session.user.id).then((profile) => {
+          if (profile) {
+            setProfile(profile);
+          } else {
+            setUsername(session.user.user_metadata?.username ?? '', session.user.id);
+          }
+        });
         registerPushNotifications(session.user.id);
         initRevenueCat(session.user.id);
       }
@@ -84,8 +85,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   if (!isPublicPage && !ready) return null;
 
-  const showNav = !isAuthPage && hasSession;
-  const showPadding = !isAuthPage && hasSession;
+  const showNav = !isAuthPage && hasSession && ready;
+  const showPadding = !isAuthPage && hasSession && ready;
 
   const inTransition = hasSession && seasonStatus.phase === 'transition';
 
