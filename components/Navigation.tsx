@@ -93,6 +93,7 @@ export default function Navigation() {
                 <li key={item.href} className="flex-1">
                   <Link
                     href={item.href}
+                    prefetch={false}
                     className={`flex flex-col items-center gap-0.5 py-3 text-xs transition-colors ${
                       active ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'
                     }`}

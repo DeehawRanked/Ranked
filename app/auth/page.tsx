@@ -81,7 +81,9 @@ export default function AuthPage() {
         setUsername(result.session.username, result.session.id);
       }
 
-      router.replace('/');
+      // Use hard navigation — Capacitor's WKWebView doesn't reliably handle
+      // client-side router.replace across routes on first load
+      window.location.replace('/');
     } catch {
       setError('Something went wrong. Please try again.');
       setLoading(false);
